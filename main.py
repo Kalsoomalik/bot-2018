@@ -29,7 +29,6 @@ def PerformAnalysis():
 
     processor =  TweetProcessor(api);
     screenName, userName, tweetId  =  processor.getValidTweet();
-
     if tweetId is not None:
         plotter = Plotter(api, screenName, userName, tweetId)
         plotter.plot()

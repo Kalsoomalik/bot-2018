@@ -24,6 +24,7 @@ class TweetProcessor(object):
             userName = tweet.user.name
             text = tweet.text
             valid = re.match('@Bot2018Plot Analyze: @[A-Za-z0-9_]*', text)
+            print("Now Processing:[" + text + "]")
             if valid:
                 analyzeScreenName = "@{}".format(tweet.entities['user_mentions'][1]['screen_name'])
                 processed = self.isProcessed(tweetId)
@@ -36,7 +37,7 @@ class TweetProcessor(object):
             else:
                 try:
                     self.api.update_status(status="@{} Valid Syntax is: "
-                                                  "@Bot2018Plot Analyze: @[CNN]".format(userScreenName),
+                                                  "Bot2018Plot Analyze: [Symbol]",
                                            in_reply_to_status_id=tweetId)
                     return False
                 except tweepy.TweepError:
@@ -75,6 +76,7 @@ class Plotter(object):
         sentiments = []
         counter = 1
         for tweet in tweepy.Cursor(self.api.user_timeline, id=self.screenName).items(500):
+            print("Analyzing:["+tweet.txt+"]")
             # Run Vader Analysis on each tweet
             analyzer = SentimentIntensityAnalyzer()
             results = analyzer.polarity_scores(tweet.text)
