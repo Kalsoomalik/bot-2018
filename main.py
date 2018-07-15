@@ -36,5 +36,5 @@ def PerformAnalysis():
 # Infinitely loop
 while(True):
     PerformAnalysis()
-    print("Sleeping for 5 minutes..")
-    time.sleep(300)
+    print("Sleeping for 1 minute..")
+    time.sleep(60)

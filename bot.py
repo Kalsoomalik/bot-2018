@@ -11,6 +11,7 @@ import matplotlib.lines as mlines
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+
 class TweetProcessor(object):
 
     def __init__(self, api):
@@ -52,6 +53,7 @@ class TweetProcessor(object):
             reader = csv.reader(file)
             for row in reader:
                 if str(tweetId) in row:
+                    print("Tweet alread processed:[" + tweetId + "]")
                     return True
             return False
 
@@ -60,13 +62,13 @@ class TweetProcessor(object):
             writer = csv.writer(file)
             for item in logItem:
                 writer = csv.writer(file)
+                print("Updating log file")
                 writer.writerow(item)
 
 
 class Plotter(object):
 
     def __init__(self, api, screenName, userName, tweetId):
-
         self.api = api
         self.screenName = screenName
         self.userName = userName
@@ -76,7 +78,7 @@ class Plotter(object):
         sentiments = []
         counter = 1
         for tweet in tweepy.Cursor(self.api.user_timeline, id=self.screenName).items(500):
-            print("Analyzing:["+tweet.text+"]")
+            print("Analyzing:[" + self.screenName + "]")
             # Run Vader Analysis on each tweet
             analyzer = SentimentIntensityAnalyzer()
             results = analyzer.polarity_scores(tweet.text)
@@ -100,21 +102,21 @@ class Plotter(object):
         plt.plot(x_vals, y_vals, marker="o", color='green', linewidth=0.5, alpha=0.6)
         now = time.strftime("%Y-%m-%d %H:%M", time.gmtime())
         plt.title(f"Sentiment Analysis of Tweets ({now})")
-        plt.xlim([x_vals.min()-2,x_vals.max()+2])
-        plt.ylim([y_vals.min()-0.2,y_vals.max()+0.25])
+        plt.xlim([x_vals.min() - 2, x_vals.max() + 2])
+        plt.ylim([y_vals.min() - 0.2, y_vals.max() + 0.25])
         plt.ylabel('Average Polarity ({:.2f})'.format(np.mean(results_df[self.screenName])))
         plt.xlabel("Tweets Ago")
         legend = mlines.Line2D([], [], color='green', marker='o',
-                                  markersize=10, alpha=0.6, label=self.screenName)
+                               markersize=10, alpha=0.6, label=self.screenName)
         plt.legend(handles=[legend], loc=3, bbox_to_anchor=(1, .86), title='Tweets')
         plt.grid(ls='dashed', zorder=0)
         imageFile = "./data/plots/{}-{}.png".format(
             self.screenName[1:],
-            time.strftime("%Y%m%d%H%M",time.gmtime()))
+            time.strftime("%Y%m%d%H%M", time.gmtime()))
         plt.savefig(imageFile, dpi=100,
                     bbox_inches='tight')
         # Reply to user
         self.api.update_with_media(imageFile,
-                               status="Analysis Report For: "
-                                      "{} ".format(self.screenName[1:]),
-                               in_reply_to_status_id=self.tweetId)
+                                   status="Analysis Report For: "
+                                          "{} ".format(self.screenName[1:]),
+                                   in_reply_to_status_id=self.tweetId)
