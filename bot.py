@@ -41,9 +41,10 @@ class TweetProcessor(object):
             else:
                 try:
                     self.api.update_status(status="@{} Valid Syntax is: "
-                                                  "@Bot2018Plot Analyze: @[Symbol]".format(userName),
+                                                  "@Bot2018Plot Analyze: @[Symbol]".format(userScreenName),
                                            in_reply_to_status_id=tweetId)
-                    return False
+                    logItem = [[tweetId, "@" + userScreenName, text, userScreenName]]
+                    self.updateLog(logItem)
                 except tweepy.TweepError:
                     pass
         return True
