@@ -76,7 +76,7 @@ class Plotter(object):
         sentiments = []
         counter = 1
         for tweet in tweepy.Cursor(self.api.user_timeline, id=self.screenName).items(500):
-            print("Analyzing:["+tweet.txt+"]")
+            print("Analyzing:["+tweet.text+"]")
             # Run Vader Analysis on each tweet
             analyzer = SentimentIntensityAnalyzer()
             results = analyzer.polarity_scores(tweet.text)
