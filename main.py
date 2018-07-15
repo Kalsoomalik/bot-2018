@@ -28,10 +28,10 @@ api = tweepy.API(auth)
 def PerformAnalysis():
 
     processor =  TweetProcessor(api);
-    result =  processor.processValidTweet();
+    processor.processValidTweet();
 
 # Infinitely loop
 while(True):
     PerformAnalysis()
-    print("Sleeping for 1 minute..")
-    time.sleep(60)
+    print("Sleeping for 5 minute..")
+    time.sleep(300)
