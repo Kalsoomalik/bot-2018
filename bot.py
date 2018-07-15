@@ -53,7 +53,7 @@ class TweetProcessor(object):
             reader = csv.reader(file)
             for row in reader:
                 if str(tweetId) in row:
-                    print("Tweet alread processed:[" + tweetId + "]")
+                    print("Tweet alread processed")
                     return True
             return False
 
