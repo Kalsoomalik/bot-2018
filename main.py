@@ -28,10 +28,11 @@ api = tweepy.API(auth)
 def PerformAnalysis():
 
     processor =  TweetProcessor(api);
-    screenName, userName, tweetId  =  processor.getValidTweet();
-    if tweetId is not None:
-        plotter = Plotter(api, screenName, userName, tweetId)
-        plotter.plot()
+    result =  processor.processValidTweet();
+
+    # if tweetId is not None:
+    #     plotter = Plotter(api, screenName, userName, tweetId)
+    #     plotter.plot()
 
 # Infinitely loop
 while(True):

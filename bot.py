@@ -17,7 +17,7 @@ class TweetProcessor(object):
     def __init__(self, api):
         self.api = api
 
-    def getValidTweet(self):
+    def processValidTweet(self):
         for tweet in tweepy.Cursor(self.api.search, q='@Bot2018Plot').items():
             # check if tweet is valid
             tweetId = tweet.id
@@ -30,21 +30,25 @@ class TweetProcessor(object):
                 analyzeScreenName = "@{}".format(tweet.entities['user_mentions'][1]['screen_name'])
                 processed = self.isProcessed(tweetId)
                 if processed:
-                    return None, None, None
+                    print("Tweet already processed.")
+                    # return None, None, None
                 else:
                     logItem = [[tweetId, "@" + userScreenName, text, analyzeScreenName]]
                     self.updateLog(logItem)
-                    return analyzeScreenName, userName, tweetId
+                    plotter = Plotter(self.api, analyzeScreenName, userName, tweetId)
+                    plotter.plot()
+                    # return analyzeScreenName, userName, tweetId
             else:
                 try:
                     self.api.update_status(status="@{} Valid Syntax is: "
-                                                  "Bot2018Plot Analyze: [Symbol]",
+                                                  "@Bot2018Plot Analyze: @[Symbol]",
                                            in_reply_to_status_id=tweetId)
                     return False
                 except tweepy.TweepError:
                     pass
-            print("Invalid Tweet")
-            return None, None, None
+                print("Invalid Tweet")
+                return False
+        return True
 
     def isProcessed(self, tweetId):
         if not os.path.exists('./data/process-log.csv'):
@@ -53,7 +57,6 @@ class TweetProcessor(object):
             reader = csv.reader(file)
             for row in reader:
                 if str(tweetId) in row:
-                    print("Tweet alread processed")
                     return True
             return False
 
