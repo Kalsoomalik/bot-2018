@@ -30,10 +30,6 @@ def PerformAnalysis():
     processor =  TweetProcessor(api);
     result =  processor.processValidTweet();
 
-    # if tweetId is not None:
-    #     plotter = Plotter(api, screenName, userName, tweetId)
-    #     plotter.plot()
-
 # Infinitely loop
 while(True):
     PerformAnalysis()

@@ -41,13 +41,11 @@ class TweetProcessor(object):
             else:
                 try:
                     self.api.update_status(status="@{} Valid Syntax is: "
-                                                  "@Bot2018Plot Analyze: @[Symbol]",
+                                                  "@Bot2018Plot Analyze: @[Symbol]".format(self.screenName[1:]),
                                            in_reply_to_status_id=tweetId)
                     return False
                 except tweepy.TweepError:
                     pass
-                print("Invalid Tweet")
-                return False
         return True
 
     def isProcessed(self, tweetId):
